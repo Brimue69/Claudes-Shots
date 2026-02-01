@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude's KI-Shots</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@600;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --claude-orange: #D97757;
+            --claude-dark: #1a1a1a;
+            --claude-light: #f5f0e8;
+            --accent: #ff6b35;
+            --glow: rgba(217, 119, 87, 0.6);
+        }
+
+        body {
+            font-family: 'Space Mono', monospace;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--claude-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(255,255,255,0.03) 0px,
+                    transparent 1px,
+                    transparent 2px,
+                    rgba(255,255,255,0.03) 3px
+                );
+            pointer-events: none;
+            animation: scan 8s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(20px); }
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(26, 26, 26, 0.9);
+            border: 2px solid var(--claude-orange);
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 
+                0 0 40px var(--glow),
+                inset 0 0 20px rgba(217, 119, 87, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.5em;
+            font-weight: 800;
+            color: var(--claude-orange);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px var(--glow);
+            animation: glow-pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-pulse {
+            0%, 100% { text-shadow: 0 0 20px var(--glow); }
+            50% { text-shadow: 0 0 30px var(--glow), 0 0 40px var(--glow); }
+        }
+
+        .subtitle {
+            font-size: 0.9em;
+            color: #888;
+            letter-spacing: 3px;
+        }
+
+        .shot-display {
+            background: linear-gradient(135deg, rgba(217, 119, 87, 0.2), rgba(255, 107, 53, 0.1));
+            border: 1px solid var(--claude-orange);
+            border-radius: 15px;
+            padding: 30px;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shot-display::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 70%
+            );
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .shot-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.8em;
+            font-weight: 800;
+            color: var(--claude-orange);
+            text-align: center;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .shot-description {
+            font-size: 1em;
+            color: #ccc;
+            text-align: center;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        .placeholder {
+            font-size: 1.2em;
+            color: #666;
+            text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        button {
+            font-family: 'Syne', sans-serif;
+            background: linear-gradient(135deg, var(--claude-orange), var(--accent));
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.2em;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(217, 119, 87, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(217, 119, 87, 0.6);
+        }
+
+        button:active {
+            transform: translateY(-1px);
+        }
+
+        button span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .terminal-cursor {
+            display: inline-block;
+            width: 10px;
+            height: 20px;
+            background: var(--claude-orange);
+            animation: blink 1s step-end infinite;
+            margin-left: 5px;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--claude-orange);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+            .shot-name {
+                font-size: 1.5em;
+            }
+            button {
+                padding: 15px 40px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Claude's Shots</h1>
+            <div class="subtitle">KI-POWERED FASNACHT</div>
+        </div>
+
+        <div class="shot-display" id="shotDisplay">
+            <div class="placeholder">
+                Klicke auf den Button für deinen Shot!<span class="terminal-cursor"></span>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button onclick="generateShot()">
+                <span id="buttonText">Zufälliger Shot</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const shots = [
+            {
+                name: "Trainingsdaten",
+                description: "Für Anfänger"
+            },
+            {
+                name: "Token-Limit-Sprenger",
+                description: "Eingabe hier - Ausgabe NICHT HIER!!"
+            },
+            {
+                name: "Algorithmen-Activator",
+                description: "Braucht evtl. länger...."
+            },
+            {
+                name: "Liquid Intelligence",
+                description: "Kann noch länger dauern...."
+            },
+            {
+                name: "Error 401",
+                description: "Identifizierung erforderlich"
+            },
+            {
+                name: "Error 408",
+                description: "Anfrage hat zu lange gedauert"
+            },
+            {
+                name: "Error 429",
+                description: "Zu viel Anfragen in zu kurzer Zeit"
+            },
+            {
+                name: "Error 302",
+                description: "Temporäre Umleitung - Shot deiner Wahl"
+            }
+        ];
+
+        function generateShot() {
+            const display = document.getElementById('shotDisplay');
+            const button = document.querySelector('button');
+            const buttonText = document.getElementById('buttonText');
+            
+            // Loading state
+            buttonText.textContent = '⚙';
+            button.classList.add('loading');
+            display.innerHTML = '<div class="placeholder">Computing...<span class="terminal-cursor"></span></div>';
+            
+            // Random delay for effect
+            setTimeout(() => {
+                const randomShot = shots[Math.floor(Math.random() * shots.length)];
+                
+                display.innerHTML = `
+                    <div class="shot-name fade-in">${randomShot.name}</div>
+                    <div class="shot-description fade-in">${randomShot.description}</div>
+                `;
+                
+                buttonText.textContent = 'Noch einen!';
+                button.classList.remove('loading');
+                
+                createParticles();
+            }, 800);
+        }
+
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 15; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                particle.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                particlesContainer.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 5000);
+            }
+        }
+
+        // Initial particles
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                document.getElementById('particles').appendChild(particle);
+                setTimeout(() => particle.remove(), 5000);
+            }
+        }, 500);
+    </script>
+</body>
+</html>
